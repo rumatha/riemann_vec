@@ -20,6 +20,7 @@ flags:
 - `-DINNER_REPEATS=100` - repeats number for processing arrays
 
 run test:
+
 `./riemann.out <lo_threads> <hi_threads>`
 
 Solver will run for threads number from <lo_thread> to <hi_threads>.
