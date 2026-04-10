@@ -12,8 +12,8 @@ mpiicc \
     $FLAGS \
     -DOPENMP_CHUNKS \
     -DTEST_MODE=1 \
-    -DREPEATS_ORIG=1 \
-    -DREPEATS_OPT=10 \
+    -DREPEATS_ORIG=3 \
+    -DREPEATS_OPT=3 \
     -DINNER_REPEATS=100 \
     -o ${EXE} \
     -lm -fopenmp

@@ -388,15 +388,15 @@ main(int argc,
 #endif
 
 #ifdef OPENMP_CHUNKS
-    cout << "num_threads = 1 vs [" << nt_min << ", " << nt_max << "] (OPENMP_CHUNKS)" << endl;
+    cout << "num_threads = [" << nt_min << ", " << nt_max << "] (OPENMP_CHUNKS)" << endl;
 #endif // OPENMP_CHUNKS
 
 #ifdef OPENMP_INTERLEAVE
-    cout << "num_threads = 1 vs [" << nt_min << ", " << nt_max << "] (OPENMP_INTERLEAVE)" << endl;
+    cout << "num_threads = [" << nt_min << ", " << nt_max << "] (OPENMP_INTERLEAVE)" << endl;
 #endif // OPENMP_INTERLEAVE
 
 #ifdef OPENMP_RACE
-    cout << "num_threads = 1 vs [" << nt_min << ", " << nt_max << "] (OPENMP_RACE)" << endl;
+    cout << "num_threads = [" << nt_min << ", " << nt_max << "] (OPENMP_RACE)" << endl;
 #endif // OPENMP_RACE
 
     for (int cur_nt = nt_min; cur_nt <= nt_max; ++cur_nt)
@@ -407,6 +407,8 @@ main(int argc,
         {
             times[i] = run(riemann_n_s, cur_nt, "n_s");
         }
+
+        cout << "    min_time " << array_min(times, REPEATS_ORIG) << endl;
     }
 
     for (int cur_nt = nt_min; cur_nt <= nt_max; ++cur_nt)
@@ -417,6 +419,8 @@ main(int argc,
         {
             times_opt[i] = run(riemann_n_v, cur_nt, "n_v");
         }
+
+        cout << "    min_time " << array_min(times_opt, REPEATS_OPT) << endl;
     }
 
     return 0;
