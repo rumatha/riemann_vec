@@ -399,31 +399,24 @@ main(int argc,
     cout << "num_threads = 1 vs [" << nt_min << ", " << nt_max << "] (OPENMP_RACE)" << endl;
 #endif // OPENMP_RACE
 
-    for (int i = 0; i < REPEATS_ORIG; i++)
+    for (int cur_nt = nt_min; cur_nt <= nt_max; ++cur_nt)
     {
-        times[i] = run(riemann_n_s, 1, "n_s");
+        cout << "--- run scalar version : " << cur_nt << " threads" << endl;
+
+        for (int i = 0; i < REPEATS_ORIG; i++)
+        {
+            times[i] = run(riemann_n_s, cur_nt, "n_s");
+        }
     }
 
-    for (int cur_nt = nt_min; cur_nt <= nt_max; cur_nt++)
+    for (int cur_nt = nt_min; cur_nt <= nt_max; ++cur_nt)
     {
-        cout << "----------" << endl;
+        cout << "--- run vector version : " << cur_nt << " threads" << endl;
 
         for (int i = 0; i < REPEATS_OPT; i++)
         {
             times_opt[i] = run(riemann_n_v, cur_nt, "n_v");
         }
-
-        double min_time = array_min(times, REPEATS_ORIG);
-        double min_time_opt = array_min(times_opt, REPEATS_OPT);
-        double time_reduce = ((min_time - min_time_opt) / min_time) * 100.0;
-        double speedup_x = min_time / min_time_opt;
-
-        cout << "test done : "
-             << "nt = " << cur_nt
-             << ", min_time = " << min_time
-             << ", min_time_opt = " << min_time_opt
-             << ", time_reduce = " << setprecision(2) << time_reduce
-             << "%, speedup_x = " << setprecision(3) << speedup_x << endl;
     }
 
     return 0;
