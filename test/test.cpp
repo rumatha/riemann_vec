@@ -312,10 +312,6 @@ main(int argc,
     int prs_len = ARR_LEN(prs);
     int ps_orig_len = ARR_LEN(ps_orig);
 
-    // Times.
-    vector<double> times;
-    vector<double> times_opt;
-
     // Threads count processing.
     int nt_min = 1, nt_max = 1;
     if (argc > 1)
@@ -406,6 +402,8 @@ main(int argc,
 
     for (int cur_nt = nt_min; cur_nt <= nt_max; ++cur_nt)
     {
+        vector<double> times;
+
         cout << "--- run scalar version : " << cur_nt << " threads" << endl;
 
         for (int i = 0; i < REPEATS_ORIG; i++)
@@ -418,6 +416,8 @@ main(int argc,
 
     for (int cur_nt = nt_min; cur_nt <= nt_max; ++cur_nt)
     {
+        vector<double> times_opt;
+
         cout << "--- run vector version : " << cur_nt << " threads" << endl;
 
         for (int i = 0; i < REPEATS_OPT; i++)
