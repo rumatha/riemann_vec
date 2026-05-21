@@ -281,8 +281,8 @@ run(void (*solver)(int,
 double
 result_avg_time(vector<double>& a)
 {
-    auto n { a.size() };
-    auto d { 2 };
+    size_t n { a.size() };
+    size_t d { 2 };
 
     if (n < 2 * d + 1)
     {
