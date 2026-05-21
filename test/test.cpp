@@ -11,6 +11,9 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
+#include <vector>
+#include <algorithm>
+#include <numeric>
 #include <omp.h>
 
 using namespace std;
@@ -267,28 +270,28 @@ run(void (*solver)(int,
     return t_len;
 }
 
-/// \brief Min value in array.
+/// \brief Result average time.
 ///
-/// \param[in] d - array
-/// \param[in] c - element count
+/// Get result measured time.
+///
+/// \param[in] a Array.
 ///
 /// \return
-/// Min value.
+/// Time.
 double
-array_min(double *d,
-          int c)
+result_avg_time(vector<double>& a)
 {
-    double m = d[0];
+    auto n { a.size() };
+    auto d { 2 };
 
-    for (int i = 1; i < c; i++)
+    if (n < 2 * d + 1)
     {
-        if (d[i] < m)
-        {
-            m = d[i];
-        }
+        d = 0;
     }
 
-    return m;
+    sort(a.begin(), a.end());
+
+    return accumulate(a.begin() + d, a.end() - d, 0.0) / (n - 2 * d);
 }
 
 /// \brief Test.
@@ -299,8 +302,6 @@ int
 main(int argc,
      char **argv)
 {
-    double times[REPEATS_ORIG];
-    double times_opt[REPEATS_OPT];
     int dls_len = ARR_LEN(dls);
     int drs_len = ARR_LEN(drs);
     int ds_orig_len = ARR_LEN(ds_orig);
@@ -310,6 +311,10 @@ main(int argc,
     int pls_len = ARR_LEN(pls);
     int prs_len = ARR_LEN(prs);
     int ps_orig_len = ARR_LEN(ps_orig);
+
+    // Times.
+    vector<double> times;
+    vector<double> times_opt;
 
     // Threads count processing.
     int nt_min = 1, nt_max = 1;
@@ -405,10 +410,10 @@ main(int argc,
 
         for (int i = 0; i < REPEATS_ORIG; i++)
         {
-            times[i] = run(riemann_n_s, cur_nt, "n_s");
+            times.push_back(run(riemann_n_s, cur_nt, "n_s"));
         }
 
-        cout << "    min_time " << array_min(times, REPEATS_ORIG) << endl;
+        cout << "    res_time " << result_avg_time(times) << endl;
     }
 
     for (int cur_nt = nt_min; cur_nt <= nt_max; ++cur_nt)
@@ -417,10 +422,10 @@ main(int argc,
 
         for (int i = 0; i < REPEATS_OPT; i++)
         {
-            times_opt[i] = run(riemann_n_v, cur_nt, "n_v");
+            times_opt.push_back(run(riemann_n_v, cur_nt, "n_v"));
         }
 
-        cout << "    min_time " << array_min(times_opt, REPEATS_OPT) << endl;
+        cout << "    res_time " << result_avg_time(times_opt) << endl;
     }
 
     return 0;
